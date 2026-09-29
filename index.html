@@ -1,0 +1,320 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ECOBIN</title>
+<style>
+:root{--g:#1b7a43;--g2:#0f5132;--t:#0d9488;--bg:#eef3f1;--c:#fff;--tx:#12261c;--mu:#6b7c74;--bd:#dfe8e3;--nv:#0b1f2a;--bl:#2563eb;--or:#f59e0b;--rd:#dc2626;--pu:#7c3aed;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}
+:root:not([data-theme=light]){}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1a22;--c:#12303a;--tx:#e8f3ef;--mu:#8fb0a6;--bd:#1f4652}}
+:root[data-theme=dark]{--bg:#0b1a22;--c:#12303a;--tx:#e8f3ef;--mu:#8fb0a6;--bd:#1f4652}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+button,input,select,textarea{font:inherit;color:inherit}
+.splash{position:fixed;inset:0;background:linear-gradient(160deg,var(--g2),#08331f);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:50;padding:20px}
+.splash h1{font-size:44px;margin:8px 0;letter-spacing:2px}
+.login{min-height:100%;display:flex;align-items:center;justify-content:center;padding:20px}
+.lbox{background:var(--c);border:1px solid var(--bd);border-radius:20px;padding:26px;width:100%;max-width:400px;box-shadow:0 8px 30px #0002}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:26px;color:var(--g)}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--c);margin:4px 0 12px}
+label{font-size:13px;color:var(--mu)}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 14px}
+.role{padding:12px 4px;border-radius:12px;border:2px solid transparent;background:#e8f1ec;cursor:pointer;text-align:center;font-size:13px;color:#12261c}
+.role.on{color:#fff}.role.on[data-r=staff]{background:var(--g)}.role.on[data-r=collector]{background:var(--bl)}.role.on[data-r=admin]{background:var(--pu)}
+.btn{background:var(--g);color:#fff;border:0;padding:11px 16px;border-radius:10px;cursor:pointer;font-weight:600}
+.btn.full{width:100%}.btn.bl{background:var(--bl)}.btn.pu{background:var(--pu)}.btn.o{background:transparent;color:var(--g);border:1px solid var(--g)}.btn.rd{background:var(--rd)}.btn.sm{padding:6px 10px;font-size:13px}
+.app{display:flex;height:100%}
+.side{width:230px;background:var(--nv);color:#cfe;display:flex;flex-direction:column;padding:14px 10px;gap:2px;overflow:auto;flex-shrink:0}
+.side .logo{color:#4ade80;padding:4px 8px 14px}
+.nav{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;gap:10px;align-items:center;font-size:14px}
+.nav:hover{background:#ffffff14}.nav.on{background:var(--g);color:#fff}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.top{display:flex;align-items:center;gap:12px;padding:12px 18px;background:var(--c);border-bottom:1px solid var(--bd)}
+.top h2{margin:0;font-size:18px;flex:1}
+.ico{position:relative;background:none;border:0;font-size:20px;cursor:pointer}
+.bd{position:absolute;top:-4px;right:-6px;background:var(--rd);color:#fff;border-radius:10px;font-size:10px;padding:1px 5px}
+.content{flex:1;overflow:auto;padding:18px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-bottom:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--c);border:1px solid var(--bd);border-radius:16px;padding:16px;box-shadow:0 2px 8px #0000000a}
+.card h3{margin:0 0 10px;font-size:15px}
+.stat b{font-size:28px;display:block}.stat span{color:var(--mu);font-size:13px}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600;background:#e0f2fe;color:#075985}
+.b-ok{background:#dcfce7;color:#166534}.b-w{background:#fef3c7;color:#92400e}.b-r{background:#fee2e2;color:#991b1b}.b-i{background:#e0e7ff;color:#3730a3}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--bd)}th{color:var(--mu);font-weight:600}
+.tw{overflow-x:auto}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}.tab{padding:7px 14px;border-radius:20px;background:var(--c);border:1px solid var(--bd);cursor:pointer;font-size:13px}.tab.on{background:var(--g);color:#fff}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g)}
+.row{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)}
+.steps{display:flex;gap:2px;margin:10px 0;flex-wrap:wrap}.steps i{flex:1;min-width:30px;height:6px;border-radius:4px;background:var(--bd)}.steps i.d{background:var(--g)}
+.map{width:100%;height:320px;background:#dbe8e2;border-radius:14px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--nv);color:#fff;padding:10px 18px;border-radius:10px;z-index:60}
+.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:55;padding:16px}.modal .card{max-width:440px;width:100%}
+.notif{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd);cursor:pointer}.notif.u{font-weight:600}
+.tg{width:44px;height:24px;border-radius:12px;background:var(--bd);position:relative;cursor:pointer;flex-shrink:0}.tg i{position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s}.tg.on{background:var(--g)}.tg.on i{left:22px}
+.bnav{display:none}
+@media(max-width:800px){.side{display:none}.content{padding:12px;padding-bottom:80px}
+.bnav{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--nv);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));overflow-x:auto;z-index:40}
+.bnav .nav{flex-direction:column;gap:2px;font-size:10px;padding:6px 10px;color:#cfe;white-space:nowrap}.map{height:260px}}
+</style></head><body><div id="root"></div>
+<script>
+const $=s=>document.querySelector(s);
+const ls={g(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const LOGO='<svg width="34" height="34" viewBox="0 0 40 40"><path d="M8 14h24l-3 22H11z" fill="#1b7a43"/><path d="M6 12h28v3H6z" fill="#0d9488"/><path d="M20 8c-6 0-9 5-8 10 6 1 10-2 10-7-1 0-2-1-2-3z" fill="#4ade80"/><path d="M18 24h4M20 22v4" stroke="#fff" stroke-width="2"/></svg>';
+const USERS={staff:{e:'staff@ecobin.com',p:'staff123',n:'Dr. Priya Sharma',sub:'ICU Ward'},collector:{e:'collector@ecobin.com',p:'collector123',n:'Rahul Kumar',sub:'Collector'},admin:{e:'admin@ecobin.com',p:'admin123',n:'Admin',sub:'System Administrator'}};
+const NAV={staff:[['dash','Dashboard','🏠'],['req','Request Collection','➕'],['my','My Requests','📋'],['hist','Waste History','🗂'],['notif','Notifications','🔔'],['prof','Profile','👤'],['set','Settings','⚙️']],
+collector:[['dash','Dashboard','🏠'],['tasks','Assigned Tasks','✅'],['robot','Robot','🤖'],['nav','Navigation','🧭'],['hist','History','🗂'],['notif','Notifications','🔔'],['prof','Profile','👤'],['set','Settings','⚙️']],
+admin:[['dash','Dashboard','🏠'],['users','Users','👥'],['hosp','Hospitals','🏥'],['coll','Collectors','🚚'],['robots','Robots','🤖'],['track','Live Tracking','📍'],['tasks','Tasks','✅'],['waste','Waste Mgmt','♻️'],['rep','Reports','📄'],['notif','Notifications','🔔'],['set','Settings','⚙️']]};
+const LOC={'ICU-2':[110,80],'Ward-3':[300,60],'OT-1':[320,200],'Pharmacy':[90,210],'Emergency':[200,140],'Laboratory':[420,130]};
+let robots=[{id:'MR-01',loc:'ICU-2',b:78,s:'Collecting',t:'T-001',dest:'ICU-2',eta:4},{id:'MR-02',loc:'Ward-3',b:45,s:'Charging',t:'—',dest:'—',eta:0},{id:'MR-03',loc:'OT-1',b:62,s:'Idle',t:'—',dest:'—',eta:0},{id:'MR-04',loc:'Pharmacy',b:100,s:'Online',t:'—',dest:'—',eta:0}];
+const STAGES=['Requested','Assigned','Robot Dispatched','In Transit','Arrived','Collecting','Collected','Completed'];
+let reqs=[{id:'REQ-1024',loc:'ICU-2',type:'Medical Waste',q:4,pr:'High',rb:'MR-01',st:5,at:'10:24 AM'},{id:'REQ-1023',loc:'ICU-2',type:'Sharps',q:2,pr:'Normal',rb:'—',st:0,at:'09:50 AM'},{id:'REQ-1020',loc:'ICU-2',type:'General',q:9,pr:'Low',rb:'MR-03',st:7,at:'Yesterday'}];
+let tasks=[{id:'T-001',loc:'ICU-2',type:'Medical Waste',q:4,pr:'High',st:'In Progress',step:1},{id:'T-002',loc:'Ward-3',type:'General Waste',q:6,pr:'Normal',st:'Pending',step:0},{id:'T-003',loc:'OT-1',type:'Sharps',q:2,pr:'High',st:'Pending',step:0}];
+const bins=[['BIN-001','ICU-2','Biohazard',91],['BIN-002','Ward-3','General',42],['BIN-003','OT-1','Sharps',84],['BIN-004','Pharmacy','Hazardous',65],['BIN-005','Emergency','Recyclable',30],['BIN-006','Laboratory','Biohazard',95]];
+const binSt=p=>p>=90?['Critical','b-r']:p>=80?['Collection Required','b-w']:p>=50?['Monitor','b-i']:['Normal','b-ok'];
+let N=[['staff','Collection request accepted','REQ-1024 accepted',1],['staff','Robot dispatched','MR-01 is on the way',1],['staff','Bin requires collection','BIN-003 at 84%',0],['collector','New task assigned','T-003 · OT-1',1],['collector','High-priority task','T-001 · ICU-2',1],['collector','Robot low battery','MR-02 at 45%, charging',0],['admin','New collection request','REQ-1024 from ICU-2',1],['admin','Robot low battery','MR-02 charging',0],['admin','Bin full','BIN-001 Critical (91%)',1],['admin','Critical waste alert','BIN-006 Biohazard 95%',1],['admin','New user','Nurse John added',0],['system','System update','Version 2.0 available',0]].map((a,i)=>({id:i,r:a[0],t:a[1],m:a[2],u:a[3]}));
+const USERLIST=[['Dr. Priya Sharma','Hospital Staff','City Hospital','ICU','Active','Today'],['Nurse John','Hospital Staff','City Hospital','Emergency','Active','Yesterday'],['Rahul Kumar','Collector','—','—','Active','Today'],['Admin','Admin','HQ','—','Active','Today'],['Amit Rao','Collector','—','—','Inactive','12 days ago']];
+const HIST=[['Today','ICU-2','Biohazard',4,'MR-01','Rahul','Collecting'],['Today','Ward-3','General',6,'MR-02','Rahul','Completed'],['Yesterday','OT-1','Sharps',2,'MR-03','Rahul','Completed'],['Yesterday','Pharmacy','Hazardous',3,'MR-04','Rahul','Completed'],['2 days ago','Emergency','Recyclable',8,'MR-01','Rahul','Completed'],['2 days ago','Laboratory','Biohazard',5,'MR-03','Rahul','Completed']];
+const CAT={Biohazard:32,Hazardous:18,Recyclable:21,General:15};
+const S={u:null,r:null,p:'dash',tab:{},task:null,rob:'MR-01',theme:ls.g('eb_theme','light'),voice:ls.g('eb_voice','0')==='1',dark:ls.g('eb_theme','light')==='dark',tf:{}};
+document.documentElement.dataset.theme=S.theme;
+const bc=s=>({Collecting:'b-w',Online:'b-ok',Idle:'b-i',Charging:'b-w',Offline:'b-r'}[s]||'b-i');
+const pc=p=>p=='Critical'?'b-r':p=='High'?'b-w':'b-i';
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+function modal(h){const m=document.createElement('div');m.className='modal';m.innerHTML='<div class="card">'+h+'<div style="margin-top:12px;text-align:right"><button class="btn o sm" onclick="this.closest(\'.modal\').remove()">Close</button></div></div>';document.body.appendChild(m)}
+const unread=()=>N.filter(n=>n.u&&(n.r==S.r||n.r=='system')).length;
+const accent=()=>S.r=='admin'?'pu':S.r=='collector'?'bl':'';
+/* ---------- login ---------- */
+let selRole='staff';
+function splash(){$('#root').innerHTML='<div class="splash">'+LOGO.replace(/34/g,'90')+'<h1>ECOBIN</h1><div>Smart Medical-Waste Collection &amp; Segregation System</div><p style="margin-top:40px;opacity:.7">Cleaner Hospitals, Greener Tomorrow</p></div>';setTimeout(loginPage,1500)}
+function loginPage(){$('#root').innerHTML=`<div class="login"><div class="lbox"><div class="logo">${LOGO}ECOBIN</div><p style="color:var(--mu);font-size:13px;margin:4px 0 16px">Smart Medical-Waste Collection &amp; Segregation System</p>
+<label>Employee ID / Email</label><input id="em" placeholder="you@ecobin.com" autocomplete="username">
+<label>Password</label><div style="position:relative"><input id="pw" type="password" placeholder="Password"><span onclick="const p=$('#pw');p.type=p.type=='password'?'text':'password'" style="position:absolute;right:10px;top:12px;cursor:pointer">👁</span></div>
+<label>Login as:</label><div class="roles">${[['staff','🏥','Hospital Staff'],['collector','🚚','Collector'],['admin','🛡','Admin']].map(r=>`<div class="role ${selRole==r[0]?'on':''}" data-r="${r[0]}" onclick="selRole='${r[0]}';loginPage()">${r[1]}<br>${r[2]}</div>`).join('')}</div>
+<div id="err" style="color:var(--rd);font-size:13px;min-height:18px"></div>
+<button class="btn full ${selRole=='admin'?'pu':selRole=='collector'?'bl':''}" onclick="doLogin()">Login</button>
+<p style="text-align:center;font-size:13px"><a href="#" onclick="event.preventDefault();toast('Password reset link sent (demo)')" style="color:var(--g)">Forgot Password?</a></p>
+<p style="font-size:11px;color:var(--mu);text-align:center">Demo: ${USERS[selRole].e} / ${USERS[selRole].p}</p></div></div>`}
+function doLogin(){const e=$('#em').value.trim().toLowerCase(),p=$('#pw').value,u=USERS[selRole];
+if(!e||!p)return $('#err').textContent='Enter email and password.';
+if(e!=u.e||p!=u.p)return $('#err').textContent='Invalid credentials for the selected role.';
+S.u=u;S.r=selRole;S.p='dash';shell()}
+/* ---------- shell ---------- */
+function shell(){const nav=NAV[S.r];const item=(n,c)=>`<div class="nav ${S.p==n[0]?'on':''}" onclick="go('${n[0]}')"><span>${n[2]}</span>${c?'':n[1]}${n[0]=='notif'&&unread()?`<span class="bd" style="position:static;margin-left:auto">${unread()}</span>`:''}</div>`;
+const title=(nav.find(n=>n[0]==S.p)||[0,'Details'])[1];
+$('#root').innerHTML=`<div class="app"><aside class="side"><div class="logo">${LOGO}ECOBIN</div>${nav.map(n=>item(n)).join('')}<div class="nav" onclick="logout()" style="margin-top:auto">🚪 Logout</div></aside>
+<div class="main"><div class="top"><h2>${title}</h2><button class="ico" title="Voice" onclick="voice()" style="${S.voice?'':'display:none'}">🎤</button><button class="ico" onclick="go('notif')">🔔${unread()?`<span class="bd">${unread()}</span>`:''}</button>
+<div style="position:relative"><button class="ico" onclick="$('#pm').style.display=$('#pm').style.display=='block'?'none':'block'">👤</button><div id="pm" class="card" style="display:none;position:absolute;right:0;top:34px;width:180px;z-index:30"><b>${S.u.n}</b><div style="font-size:12px;color:var(--mu);margin-bottom:8px">${S.u.sub}</div>${S.r!='admin'?'<div class="nav on" style="background:none;color:var(--tx)" onclick="go(\'prof\')">Profile</div>':''}<div class="nav" style="color:var(--tx)" onclick="go('set')">Settings</div><div class="nav" style="color:var(--rd)" onclick="logout()">Logout</div></div></div></div>
+<div class="content" id="ct"></div></div></div><nav class="bnav">${nav.filter(n=>n[0]!='prof'||S.r=='staff').map(n=>item(n,1).replace('</span>','</span><span>'+n[1].split(' ')[0]+'</span>')).join('')}<div class="nav" onclick="logout()">🚪<span>Logout</span></div></nav>`;
+const fn=PAGES[S.p+'_'+S.r]||PAGES[S.p];$('#ct').innerHTML='<div class="card" style="height:90px;opacity:.4">Loading…</div>';setTimeout(()=>{$('#ct').innerHTML=fn()},120)}
+function go(p){S.p=p;S.task=null;shell()}
+function logout(){S.u=S.r=null;loginPage()}
+function tabs(k,arr){const c=S.tab[k]||arr[0];return `<div class="tabs">${arr.map(a=>`<div class="tab ${a==c?'on':''}" onclick="S.tab['${k}']='${a}';shell()">${a}</div>`).join('')}</div>`}
+const tb=(h,r)=>`<div class="tw"><table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')||'<tr><td colspan=9>No data yet.</td></tr>'}</table></div>`;
+const stat=(v,l,ic)=>`<div class="card stat"><span>${ic||''} ${l}</span><b>${v}</b></div>`;
+const bars=(o,unit)=>{const m=Math.max(...Object.values(o));return Object.entries(o).map(([k,v])=>`<div style="margin:8px 0"><div class="row" style="border:0;padding:0"><span>${k}</span><b>${v}${unit||''}</b></div><div class="bar"><i style="width:${v/m*100}%"></i></div></div>`).join('')};
+const binCounts={Normal:22,Monitor:12,'Collection Required':9,Critical:5};
+const chartCat=`<div class="card"><h3>Waste by Category</h3>${bars(CAT,' kg')}<div class="row"><b>Total</b><b>86 kg</b></div></div>`;
+const chartBin=`<div class="card"><h3>Bin Fill Level Status</h3>${bars(binCounts)}</div>`;
+function map(sel,h){const rs=robots;return `<svg class="map" viewBox="0 0 520 280" preserveAspectRatio="xMidYMid meet" ${h?'':''}><g stroke="#fff" stroke-width="10" opacity=".9"><path d="M0 100H520M0 170H520M150 0V280M370 0V280M250 0V280"/></g><g fill="#cfe0d8"><rect x="20" y="20" width="100" height="60" rx="6"/><rect x="390" y="20" width="110" height="80" rx="6"/><rect x="170" y="200" width="160" height="60" rx="6"/></g>
+<path d="M110 80L110 100L200 100L200 140L320 170L320 200" fill="none" stroke="#2563eb" stroke-width="4" stroke-dasharray="8 5"/>
+${Object.entries(LOC).map(([k,[x,y]])=>`<g><circle cx="${x}" cy="${y}" r="5" fill="#64748b"/><text x="${x+8}" y="${y+4}" font-size="11" fill="#334155">${k}</text></g>`).join('')}
+${rs.map(r=>{const [x,y]=LOC[r.loc];const c={Collecting:'#f59e0b',Online:'#16a34a',Idle:'#2563eb',Charging:'#eab308',Offline:'#dc2626'}[r.s];return `<g style="cursor:pointer" onclick="S.rob='${r.id}';${sel?`selRobot('${r.id}')`:`toast('${r.id}: ${r.s}, ${r.b}%')`}"><circle cx="${x-14}" cy="${y-18}" r="13" fill="${c}" stroke="#fff" stroke-width="3"/><text x="${x-14}" y="${y-14}" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">${r.id.slice(3)}</text></g>`}).join('')}</svg>`}
+function robPanel(id){const r=robots.find(x=>x.id==id)||robots[0];return `<div class="card"><h3>🤖 ${r.id} <span class="badge ${bc(r.s)}">${r.s}</span></h3><div class="row"><span>Battery</span><b>${r.b}%</b></div><div class="bar"><i style="width:${r.b}%;background:${r.b<30?'var(--rd)':'var(--g)'}"></i></div><div class="row"><span>Location</span><b>${r.loc}</b></div><div class="row"><span>Current Task</span><b>${r.t}</b></div><div class="row"><span>Destination</span><b>${r.dest}</b></div><div class="row"><span>ETA</span><b>${r.eta?r.eta+' min':'—'}</b></div>
+<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap"><button class="btn sm" onclick="toast('Route to ${r.dest} highlighted')">View Route</button>${S.r!='staff'?`<button class="btn sm bl" onclick="toast('Navigation started for ${r.id}')">Start Navigation</button><button class="btn sm o" onclick="toast('Location refreshed')">Refresh</button>`:''}${S.r=='admin'?`<button class="btn sm pu" onclick="assign('${r.id}')">Assign Task</button><button class="btn sm o" onclick="modal('<h3>${r.id} history</h3><p>Last 5 tasks completed. Avg trip 6 min.</p>')">History</button>`:''}</div></div>`}
+function selRobot(id){$('#rp').innerHTML=robPanel(id)}
+function assign(id){const r=robots.find(x=>x.id==id);const t=tasks.find(t=>t.st=='Pending');if(!t)return toast('No pending tasks');r.s='Collecting';r.t=t.id;r.dest=t.loc;r.eta=5;t.st='In Progress';N.unshift({id:Date.now(),r:'collector',t:'New task assigned',m:t.id+' → '+id,u:1});toast(t.id+' assigned to '+id);shell()}
+const trackPage=()=>`<div class="grid g2" style="grid-template-columns:2fr 1fr"><div class="card"><h3>Live Robot Map</h3>${map(1)}</div><div id="rp">${robPanel(S.rob)}</div></div>`;
+/* ---------- pages ---------- */
+const PAGES={
+dash_staff(){const r=reqs[0];return `<h3 style="margin:0">Welcome, ${S.u.n}</h3><p style="color:var(--mu);margin-top:2px">Hospital / Department: ICU Ward</p>
+<div class="grid">${stat(reqs.filter(r=>r.st<7).length,'Pending Requests','🟠')}${stat(8,'Collected Today','✅')}${stat(1,'Active Robots','🤖')}</div>
+<button class="btn full" style="margin-bottom:14px" onclick="go('req')">+ REQUEST COLLECTION</button>
+<div class="grid g2"><div class="card"><h3>Current Request</h3><b>${r.loc}</b> → Robot ${r.rb} → <span class="badge b-w">${STAGES[r.st]}</span><div class="steps">${STAGES.map((s,i)=>`<i class="${i<=r.st?'d':''}" title="${s}"></i>`).join('')}</div><div class="row"><span>Robot location</span><b>${robots[0].loc}</b></div><div class="row"><span>Battery</span><b>${robots[0].b}%</b></div><div class="row"><span>Progress</span><b>${Math.round((r.st+1)/8*100)}%</b></div></div>${chartCat}${chartBin}</div>
+<div class="card"><h3>Robot Tracking · MR-01</h3>${map()}<div style="margin-top:8px"><button class="btn sm" onclick="toast('Route: ICU-2 ← Emergency ← Pharmacy')">View Route</button></div></div>`},
+req(){return `<div class="card" style="max-width:560px" id="rf"><h3>Request Collection</h3><label>Hospital / Location</label><select id="f1">${Object.keys(LOC).map(l=>`<option>${l}</option>`).join('')}</select><label>Ward / Department</label><select id="f2"><option>ICU Ward</option><option>Emergency</option><option>Surgery</option></select><label>Waste Type</label><select id="f3">${['Medical Waste','Biohazard','Sharps','Hazardous','Recyclable','General'].map(l=>`<option>${l}</option>`).join('')}</select><label>Quantity (kg)</label><input id="f4" type="number" min="1" value="4"><label>Priority</label><select id="f5">${['Low','Normal','High','Critical'].map(l=>`<option ${l=='High'?'selected':''}>${l}</option>`).join('')}</select><label>Additional Notes (Optional)</label><textarea id="f6" rows="3" placeholder="e.g. Sharp waste, specific bin"></textarea><button class="btn full" onclick="submitReq()">SUBMIT REQUEST</button></div>`},
+my(){const t=(S.tab.my||'All');const f=reqs.filter(r=>t=='All'||(t=='Pending'&&r.st==0)||(t=='In Progress'&&r.st>0&&r.st<7)||(t=='Completed'&&r.st==7));return tabs('my',['All','Pending','In Progress','Completed'])+(f.length?f.map(r=>`<div class="card" style="margin-bottom:10px;cursor:pointer" onclick="reqDetail('${r.id}')"><div class="row" style="border:0"><b>${r.id}</b><span class="badge ${r.st==7?'b-ok':r.st?'b-w':'b-i'}">${STAGES[r.st]}</span></div>${r.loc} · ${r.type} · ${r.q} kg · <span class="badge ${pc(r.pr)}">${r.pr}</span><div style="color:var(--mu);font-size:13px">${r.at} · Robot ${r.rb}</div></div>`).join(''):'<div class="card">No requests in this tab.</div>')},
+hist(){const q=(S.tf.q||'').toLowerCase();const rows=HIST.filter(r=>r.join(' ').toLowerCase().includes(q));return `<div class="card" style="margin-bottom:14px"><div style="display:flex;gap:8px;flex-wrap:wrap"><input placeholder="Filter by date, ward, type, status…" value="${S.tf.q||''}" oninput="S.tf.q=this.value;clearTimeout(window._t);window._t=setTimeout(()=>{shell();const i=$('input');i&&(i.focus(),i.setSelectionRange(99,99))},300)" style="flex:1;margin:0"><button class="btn o" onclick="csv()">Download CSV</button></div></div><div class="grid g2">${chartCat}<div class="card"><h3>Collected (kg) by day</h3>${bars({Mon:12,Tue:18,Wed:9,Thu:22,Fri:25})}</div></div><div class="card">${tb(['Date','Location','Type','Kg','Robot','Collector','Status'],rows.map(r=>[r[0],r[1],r[2],r[3],r[4],r[5],`<span class="badge ${r[6]=='Completed'?'b-ok':'b-w'}">${r[6]}</span>`]))}</div>`},
+notif(){const t=S.tab.n||'All';const key={All:0,Staff:'staff',Collector:'collector',Admin:'admin',System:'system'};const list=N.filter(n=>(S.r=='admin'?true:(n.r==S.r||n.r=='system'))&&(!key[t]||n.r==key[t]));return `<div style="display:flex;justify-content:space-between"><div style="flex:1">${tabs('n',['All','Staff','Collector','Admin','System'])}</div><button class="btn o sm" style="height:32px" onclick="N.forEach(n=>n.u=0);shell()">Mark all read</button></div><div class="card">${list.map(n=>`<div class="notif ${n.u?'u':''}" onclick="N.find(x=>x.id==${n.id}).u=0;shell()"><span>${n.t.includes('atter')||n.t.includes('full')||n.t.includes('ritical')?'🔴':'🔔'}</span><div style="flex:1">${n.t}<div style="font-size:13px;color:var(--mu);font-weight:400">${n.m}</div></div><span class="badge">${n.r}</span></div>`).join('')||'Nothing here.'}</div>`},
+prof(){return `<div class="card" style="max-width:480px"><h3>${S.u.n}</h3><div class="row"><span>Email</span><b>${S.u.e}</b></div><div class="row"><span>Role</span><b>${S.r}</b></div><div class="row"><span>Department</span><b>${S.u.sub}</b></div></div>`},
+set(){const tg=(k,l,on)=>`<div class="row"><span>${l}</span><div class="tg ${on?'on':''}" onclick="tog('${k}')"><i></i></div></div>`;return `<div class="grid g2"><div class="card"><h3>Account</h3><div class="row"><span>Name</span><b>${S.u.n}</b></div><div class="row"><span>Email</span><b>${S.u.e}</b></div><h3 style="margin-top:14px">Language</h3><select onchange="toast('Language: '+this.value)"><option>English</option><option disabled>हिन्दी (coming soon)</option></select></div>
+<div class="card"><h3>Appearance & Voice</h3>${tg('dark','Dark Mode',S.dark)}${tg('voice','Voice Mode',S.voice)}<p style="font-size:12px;color:var(--mu)">${window.SpeechRecognition||window.webkitSpeechRecognition?'Voice commands available: "show pending requests", "track robot MR-01", "open notifications".':'Voice requires a browser with speech recognition support.'}</p></div>
+<div class="card"><h3>Notifications</h3>${['Collection updates','Robot alerts','Bin alerts','System alerts'].map(x=>tg('n_'+x,x,ls.g('n_'+x,'1')=='1')).join('')}</div>
+<div class="card"><h3>Security</h3><button class="btn o" onclick="modal('<h3>Change Password</h3><input type=password placeholder=Current><input type=password placeholder=New><button class=&quot;btn full&quot; onclick=&quot;this.closest(\\'.modal\\').remove();toast(\\'Password updated (demo)\\')&quot;>Update</button>')">Change Password</button>${tg('2fa','Two-factor authentication',ls.g('2fa','0')=='1')}</div></div>`},
+/* collector */
+dash_collector(){return `<h3 style="margin:0">Collector · ${S.u.n}</h3><div class="grid" style="margin-top:12px">${stat(5,"Today's Tasks")}${stat(3,'Completed','✅')}${stat(tasks.filter(t=>t.st!='Completed').length,'Pending','🟠')}</div><h3>Assigned Tasks</h3>${taskCards()}`},
+tasks_collector(){return S.task?taskDetail():taskCards()},
+robot_collector:trackPage,nav_collector(){return `<div class="card"><h3>Navigation</h3>${map()}<button class="btn bl" style="margin-top:10px" onclick="toast('Navigating to ${tasks[0].loc}')">Navigate</button></div>`},
+hist_collector(){return PAGES.hist()},
+/* admin */
+dash_admin(){const crit=bins.filter(b=>b[3]>=90).length;return `<div class="grid">${stat(12,'Total Users','👥')}${stat(4,'Total Robots','🤖')}${stat(8,'Hospitals','🏥')}${stat(tasks.length+4,'Active Tasks','✅')}${stat(reqs.filter(r=>!r.st).length,'Pending Requests')}${stat('86 kg','Collected Today')}${stat(crit,'Critical Alerts','🔴')}${stat(robots.filter(r=>r.s!='Offline').length,'Online Robots','🟢')}</div><div class="grid g2">${chartCat}${chartBin}<div class="card"><h3>Robot Status</h3>${robots.map(r=>`<div class="row"><b>${r.id}</b><span class="badge ${bc(r.s)}">${r.s}</span><span>${r.b}%</span></div>`).join('')}</div></div>`},
+users(){return `<button class="btn pu" style="margin-bottom:12px" onclick="modal('<h3>Add User</h3><input placeholder=Name><select><option>Hospital Staff<option>Collector<option>Admin</select><button class=&quot;btn pu full&quot; onclick=&quot;this.closest(\\'.modal\\').remove();toast(\\'User added (demo)\\')&quot;>Save</button>')">+ Add User</button><div class="card">${tb(['Name','Role','Hospital','Dept','Status','Last Login','Actions'],USERLIST.map((u,i)=>[...u.slice(0,4),`<span class="badge ${u[4]=='Active'?'b-ok':'b-r'}">${u[4]}</span>`,u[5],`<button class="btn sm o" onclick="toast('Edit ${u[0]}')">Edit</button> <button class="btn sm o" onclick="toast('Password reset sent')">Reset</button> <button class="btn sm rd" onclick="USERLIST[${i}][4]=USERLIST[${i}][4]=='Active'?'Inactive':'Active';shell()">${u[4]=='Active'?'Deactivate':'Activate'}</button>`]))}</div>`},
+hosp(){return `<div class="card">${tb(['Hospital','Location','Departments','Staff','Bins','Robots','Waste (kg)'],[['City Hospital','Mumbai',6,48,22,2,412],['Sunrise Medical','Pune',4,30,14,1,268],['Apollo Care','Thane',5,36,18,1,305],['Metro Clinic','Navi Mumbai',3,18,9,0,140]])}</div>`},
+coll(){return `<div class="card">${tb(['Collector','Status','Tasks Today','Robot'],[['Rahul Kumar','<span class="badge b-ok">On duty</span>',5,'MR-01'],['Amit Rao','<span class="badge b-r">Off duty</span>',0,'—']])}</div>`},
+robots(){return `<div class="card">${tb(['Robot','Status','Battery','Location','Task','Last Update','Actions'],robots.map(r=>[`<b>${r.id}</b>`,`<span class="badge ${bc(r.s)}">${r.s}</span>`,r.b+'%',r.loc,r.t,'just now',`<button class="btn sm" onclick="S.rob='${r.id}';go('track')">Track</button> <button class="btn sm pu" onclick="assign('${r.id}')">Assign</button> <button class="btn sm o" onclick="toast('Config opened for ${r.id}')">Config</button>`]))}</div>`},
+track:trackPage,
+tasks_admin(){return `<div class="card">${tb(['Task','Location','Type','Kg','Priority','Status'],tasks.map(t=>[t.id,t.loc,t.type,t.q,`<span class="badge ${pc(t.pr)}">${t.pr}</span>`,t.st]))}</div>`},
+waste(){const t=S.tab.w||'Bin Monitoring';return tabs('w',['Bin Monitoring','Analytics','AI Classification'])+(t=='Bin Monitoring'?`<div class="card">${tb(['Bin','Location','Category','Fill','Status','Recommendation'],bins.map(b=>{const s=binSt(b[3]);return [b[0],b[1],b[2],`<div class="bar" style="width:80px;display:inline-block"><i style="width:${b[3]}%;background:${b[3]>=90?'var(--rd)':b[3]>=80?'var(--or)':'var(--g)'}"></i></div> ${b[3]}%`,`<span class="badge ${s[1]}">${s[0]}</span>`,b[3]>=80?'Collect now':'—']}))}</div>`:t=='Analytics'?`<div class="tabs">${['Today','7 Days','30 Days','Custom'].map((x,i)=>`<div class="tab ${i==1?'on':''}" onclick="toast('Range: ${x}')">${x}</div>`).join('')}</div><div class="grid">${stat('86 kg','Total Waste')}${stat('32 kg','Biohazard')}${stat('18 kg','Hazardous')}${stat('21 kg','Recyclable')}</div><div class="grid g2">${chartCat}<div class="card"><h3>By Hospital</h3>${bars({'City Hospital':412,'Apollo Care':305,'Sunrise':268,'Metro':140})}</div><div class="card"><h3>Trend (kg/day)</h3>${bars({Mon:60,Tue:72,Wed:55,Thu:80,Fri:86})}</div>${chartBin}</div><button class="btn o" onclick="csv()">Download CSV</button> <button class="btn" onclick="toast('Report generated')">Generate Report</button>`:aiPage())},
+rep(){return `<div class="grid g2">${['Daily Waste','Weekly Waste','Monthly Waste','Hospital','Robot Performance','Collector Performance','Waste Category','Bin Fill'].map(r=>`<div class="card"><h3>${r} Report</h3><button class="btn sm" onclick="toast('${r} report generated')">Generate</button> <button class="btn sm o" onclick="toast('PDF exported (demo)')">Export PDF</button> <button class="btn sm o" onclick="csv()">CSV</button></div>`).join('')}</div>`}
+};
+function aiPage(){const ex=[['Biohazard',96,'High Confidence','b-ok'],['Sharps',68,'Manual Verification Required','b-w']];return `<div class="card"><h3>AI Waste Classification <span class="badge b-i">Demo / simulated</span></h3><p style="font-size:13px;color:var(--mu)">No real model is connected; results are simulated.</p><div style="font-size:13px">Collected → Image capture → Classification → Confidence → (≥90% auto | &lt;90% manual review) → Segregation → Database</div></div><div class="grid g2" style="margin-top:14px">${ex.map((e,i)=>`<div class="card"><div style="font-size:40px">📷</div><div class="row"><span>Detected</span><b>${e[0]}</b></div><div class="row"><span>Confidence</span><b>${e[1]}%</b></div><span class="badge ${e[3]}">${e[2]}</span>${e[1]<90?`<div style="margin-top:10px"><select id="ai${i}"><option>Biohazard<option selected>Sharps<option>Hazardous</select><button class="btn sm" onclick="toast('Category set to '+$('#ai${i}').value+'; database updated')">Confirm Category</button></div>`:''}</div>`).join('')}</div>`}
+function taskCards(){return tasks.map(t=>`<div class="card" style="margin-bottom:10px;cursor:pointer" onclick="S.task='${t.id}';S.p='tasks';shell()"><div class="row" style="border:0"><b>TASK ${t.id}</b><span class="badge ${t.st=='Completed'?'b-ok':t.st=='Pending'?'b-i':'b-w'}">${t.st}</span></div>${t.loc} · ${t.type} · ${t.q} kg · <span class="badge ${pc(t.pr)}">${t.pr.toUpperCase()}</span></div>`).join('')}
+const WF=['START TASK','NAVIGATE','ARRIVED','MARK AS COLLECTED','CONFIRM COMPLETION'];
+function taskDetail(){const t=tasks.find(x=>x.id==S.task);const b=WF[t.step];return `<button class="btn o sm" onclick="S.task=null;shell()">← Back</button><div class="grid g2" style="margin-top:10px"><div class="card"><h3>${t.id} <span class="badge b-w">${t.st}</span></h3><div class="row"><span>Location</span><b>${t.loc}</b></div><div class="row"><span>Waste Type</span><b>${t.type}</b></div><div class="row"><span>Quantity</span><b>${t.q} kg</b></div><div class="row"><span>Priority</span><b>${t.pr}</b></div><div class="row"><span>Assigned</span><b>10:24 AM</b></div><div class="steps">${WF.map((w,i)=>`<i class="${i<t.step?'d':''}"></i>`).join('')}</div>${b?`<button class="btn bl full" onclick="advance('${t.id}')">${b}</button>`:'<div class="badge b-ok">Task completed</div>'}</div><div class="card"><h3>Map</h3>${map()}</div></div>`}
+function advance(id){const t=tasks.find(x=>x.id==id);t.step++;t.st=t.step>=5?'Completed':'In Progress';if(t.st=='Completed'){N.unshift({id:Date.now(),r:'admin',t:'Task completed',m:t.id+' at '+t.loc,u:1});HIST.unshift(['Today',t.loc,t.type,t.q,'MR-01','Rahul','Completed'])}toast(WF[t.step-1]+' ✓');shell()}
+function submitReq(){const q=+$('#f4').value;if(!q||q<1)return toast('Enter a valid quantity');const id='REQ-'+(1025+reqs.length-3);const r={id,loc:$('#f1').value,type:$('#f3').value,q,pr:$('#f5').value,rb:'—',st:0,at:'Just now'};reqs.unshift(r);tasks.push({id:'T-00'+(tasks.length+1),loc:r.loc,type:r.type,q,pr:r.pr,st:'Pending',step:0});N.unshift({id:Date.now(),r:'admin',t:'New collection request',m:id+' from '+r.loc,u:1});N.unshift({id:Date.now()+1,r:'collector',t:'New task assigned',m:r.loc+' · '+r.type,u:1});
+$('#rf').innerHTML=`<h3>✅ Collection request submitted successfully.</h3><div class="row"><span>Request ID</span><b>${id}</b></div><div class="row"><span>Status</span><span class="badge b-i">Pending</span></div><button class="btn full" style="margin-top:12px" onclick="go('my')">View My Requests</button>`}
+function reqDetail(id){const r=reqs.find(x=>x.id==id);modal(`<h3>${r.id}</h3><p>${r.loc} · ${r.type} · ${r.q} kg · ${r.pr}</p><div class="steps">${STAGES.map((s,i)=>`<i class="${i<=r.st?'d':''}"></i>`).join('')}</div><b>${STAGES[r.st]}</b> · Robot ${r.rb}`)}
+function csv(){const rows=[['Date','Location','Type','Kg','Robot','Collector','Status'],...HIST].map(r=>r.join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows],{type:'text/csv'}));a.download='ecobin_report.csv';a.click()}
+function tog(k){if(k=='dark'){S.dark=!S.dark;S.theme=S.dark?'dark':'light';ls.s('eb_theme',S.theme);document.documentElement.dataset.theme=S.theme}else if(k=='voice'){S.voice=!S.voice;ls.s('eb_voice',S.voice?'1':'0')}else ls.s(k,ls.g(k,k=='2fa'?'0':'1')=='1'?'0':'1');shell()}
+function voice(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R)return toast('Voice needs browser speech-recognition support');const r=new R();r.lang='en-US';toast('Listening…');r.onresult=e=>{const c=e.results[0][0].transcript.toLowerCase();toast('Heard: '+c);if(c.includes('pending'))go(S.r=='staff'?'my':'tasks');else if(c.includes('robot')){S.rob=(c.match(/mr[- ]?0?(\d)/)||[0,1])[1];S.rob='MR-0'+S.rob;go(S.r=='staff'?'dash':S.r=='admin'?'track':'robot')}else if(c.includes('waste'))go(S.r=='admin'?'waste':'hist');else if(c.includes('notification'))go('notif')};r.start()}
+setInterval(()=>{if(S.r&&(S.p=='track'||S.p=='robot')&&document.hidden===false){/* simulated telemetry */robots[0].b=Math.max(20,robots[0].b-0)}},5000);
+</script><script>
+/* ===== ECOBIN v2: i18n + voice + TTS + AI support ===== */
+const LG=['en','hi','or','bn','te','ta'],LN=['English','हिन्दी','ଓଡ଼ିଆ','বাংলা','తెలుగు','தமிழ்'],SR=['en-IN','hi-IN','or-IN','bn-IN','te-IN','ta-IN'];
+const K={
+'nav.dashboard':['Dashboard','डैशबोर्ड','ଡ୍ୟାସବୋର୍ଡ','ড্যাশবোর্ড','డ్యాష్‌బోర్డ్','டாஷ்போர்டு'],
+'nav.request':['Request Collection','संग्रह अनुरोध','ସଂଗ୍ରହ ଅନୁରୋଧ','সংগ্রহের অনুরোধ','సేకరణ అభ్యర్థన','சேகரிப்பு கோரிக்கை'],
+'nav.my':['My Requests','मेरे अनुरोध','ମୋ ଅନୁରୋଧ','আমার অনুরোধ','నా అభ్యర్థనలు','எனது கோரிக்கைகள்'],
+'nav.history':['Waste History','कचरा इतिहास','ବର୍ଜ୍ୟ ଇତିହାସ','বর্জ্যের ইতিহাস','వ్యర్థాల చరిత్ర','கழிவு வரலாறு'],
+'nav.notif':['Notifications','सूचनाएं','ବିଜ୍ଞପ୍ତି','বিজ্ঞপ্তি','నోటిఫికేషన్లు','அறிவிப்புகள்'],
+'nav.profile':['Profile','प्रोफ़ाइल','ପ୍ରୋଫାଇଲ୍','প্রোফাইল','ప్రొఫైల్','சுயவிவரம்'],
+'nav.settings':['Settings','सेटिंग्स','ସେଟିଂସ','সেটিংস','సెట్టింగ్‌లు','அமைப்புகள்'],
+'nav.logout':['Logout','लॉगआउट','ଲଗଆଉଟ୍','লগআউট','లాగ్ అవుట్','வெளியேறு'],
+'nav.tasks':['Assigned Tasks','सौंपे गए कार्य','ଦିଆଯାଇଥିବା କାର୍ଯ୍ୟ','নির্ধারিত কাজ','కేటాయించిన పనులు','ஒதுக்கிய பணிகள்'],
+'nav.robots':['Robots','रोबोट','ରୋବଟ୍','রোবট','రోబోట్లు','ரோபோக்கள்'],
+'nav.reports':['Reports','रिपोर्ट','ରିପୋର୍ଟ','রিপোর্ট','నివేదికలు','அறிக்கைகள்'],
+'nav.users':['Users','उपयोगकर्ता','ଉପଯୋଗକର୍ତ୍ତା','ব্যবহারকারী','వినియోగదారులు','பயனர்கள்'],
+'nav.track':['Live Tracking','लाइव ट्रैकिंग','ଲାଇଭ୍ ଟ୍ରାକିଂ','লাইভ ট্র্যাকিং','లైవ్ ట్రాకింగ్','நேரடி கண்காணிப்பு'],
+'dash.pending':['Pending Requests','लंबित अनुरोध','ବକେୟା ଅନୁରୋଧ','মুলতুবি অনুরোধ','పెండింగ్ అభ్యర్థనలు','நிலுவை கோரிக்கைகள்'],
+'dash.collected':['Collected Today','आज एकत्रित','ଆଜି ସଂଗୃହୀତ','আজ সংগৃহীত','నేడు సేకరించినవి','இன்று சேகரிக்கப்பட்டவை'],
+'dash.robots':['Active Robots','सक्रिय रोबोट','ସକ୍ରିୟ ରୋବଟ୍','সক্রিয় রোবট','క్రియాశీల రోబోట్లు','செயலில் உள்ள ரோபோக்கள்'],
+'dash.request':['+ REQUEST COLLECTION','+ संग्रह अनुरोध करें','+ ସଂଗ୍ରହ ଅନୁରୋଧ କରନ୍ତୁ','+ সংগ্রহের অনুরোধ করুন','+ సేకరణ అభ్యర్థించండి','+ சேகரிப்பு கோருக'],
+'dash.current':['Current Request','वर्तमान अनुरोध','ବର୍ତ୍ତମାନ ଅନୁରୋଧ','বর্তমান অনুরোধ','ప్రస్తుత అభ్యర్థన','தற்போதைய கோரிக்கை'],
+'dash.category':['Waste by Category','श्रेणी अनुसार कचरा','ବର୍ଗ ଅନୁସାରେ ବର୍ଜ୍ୟ','বিভাগ অনুযায়ী বর্জ্য','వర్గం వారీ వ్యర్థాలు','வகை வாரியாக கழிவு'],
+'dash.bins':['Bin Fill Level Status','डिब्बा भराव स्तर','ବିନ୍ ଭର୍ତ୍ତି ସ୍ତର','বিন পূরণের স্তর','బిన్ నిండే స్థాయి','தொட்டி நிரம்பிய நிலை'],
+'req.location':['Hospital / Location','अस्पताल / स्थान','ଡାକ୍ତରଖାନା / ସ୍ଥାନ','হাসপাতাল / অবস্থান','ఆసుపత్రి / స్థానం','மருத்துவமனை / இடம்'],
+'req.type':['Waste Type','कचरे का प्रकार','ବର୍ଜ୍ୟ ପ୍ରକାର','বর্জ্যের ধরন','వ్యర్థ రకం','கழிவு வகை'],
+'req.qty':['Quantity (kg)','मात्रा (किग्रा)','ପରିମାଣ (କିଗ୍ରା)','পরিমাণ (কেজি)','పరిమాణం (కిలో)','அளவு (கிலோ)'],
+'req.priority':['Priority','प्राथमिकता','ପ୍ରାଥମିକତା','অগ্রাধিকার','ప్రాధాన్యత','முன்னுரிமை'],
+'req.submit':['SUBMIT REQUEST','अनुरोध जमा करें','ଅନୁରୋଧ ଦାଖଲ କରନ୍ତୁ','অনুরোধ জমা দিন','అభ్యర్థన సమర్పించండి','கோரிக்கையை சமர்ப்பி'],
+'req.ok':['Collection request submitted successfully.','संग्रह अनुरोध सफलतापूर्वक जमा हुआ।','ସଂଗ୍ରହ ଅନୁରୋଧ ସଫଳତାର ସହ ଦାଖଲ ହେଲା।','সংগ্রহের অনুরোধ সফলভাবে জমা হয়েছে।','సేకరణ అభ్యర్థన విజయవంతంగా సమర్పించబడింది.','சேகரிப்பு கோரிக்கை வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது.'],
+'st.pending':['Pending','लंबित','ବକେୟା','মুলতুবি','పెండింగ్','நிலுவை'],
+'st.progress':['In Progress','प्रगति में','ଚାଲିଛି','চলমান','పురోగతిలో','செயலில்'],
+'st.completed':['Completed','पूर्ण','ସମ୍ପୂର୍ଣ୍ଣ','সম্পন্ন','పూర్తయింది','முடிந்தது'],
+'st.collecting':['Collecting','एकत्र हो रहा','ସଂଗ୍ରହ ଚାଲିଛି','সংগ্রহ চলছে','సేకరిస్తోంది','சேகரிக்கிறது'],
+'st.online':['Online','ऑनलाइन','ଅନଲାଇନ୍','অনলাইন','ఆన్‌లైన్','ஆன்லைன்'],
+'st.idle':['Idle','निष्क्रिय','ନିଷ୍କ୍ରିୟ','নিষ্ক্রিয়','ఖాళీగా','செயலற்றது'],
+'st.charging':['Charging','चार्ज हो रहा','ଚାର୍ଜ ହେଉଛି','চার্জ হচ্ছে','ఛార్జ్ అవుతోంది','சார்ஜ் ஆகிறது'],
+'pr.low':['Low','कम','କମ୍','কম','తక్కువ','குறைவு'],
+'pr.normal':['Normal','सामान्य','ସାଧାରଣ','সাধারণ','సాధారణ','சாதாரண'],
+'pr.high':['High','उच्च','ଉଚ୍ଚ','উচ্চ','అధికం','உயர்'],
+'pr.critical':['Critical','गंभीर','ସଂକଟଜନକ','জটিল','తీవ్రం','மிகவும் முக்கியம்'],
+'waste.bio':['Biohazard','जैव-खतरा','ଜୈବ-ବିପଦ','জৈব-ঝুঁকি','జీవ ప్రమాదం','உயிர் ஆபத்து'],
+'waste.haz':['Hazardous','खतरनाक','ବିପଜ୍ଜନକ','বিপজ্জনক','ప్రమాదకరం','ஆபத்தானது'],
+'waste.rec':['Recyclable','पुनर्चक्रण योग्य','ପୁନଃଚକ୍ରଣୀୟ','পুনর্ব্যবহারযোগ্য','రీసైకిల్ చేయదగినది','மறுசுழற்சி'],
+'waste.gen':['General','सामान्य कचरा','ସାଧାରଣ ବର୍ଜ୍ୟ','সাধারণ বর্জ্য','సాధారణ వ్యర్థాలు','பொது கழிவு'],
+'set.language':['Language','भाषा','ଭାଷା','ভাষা','భాష','மொழி'],
+'set.voice':['Voice Mode','वॉइस मोड','ଭଏସ୍ ମୋଡ୍','ভয়েস মোড','వాయిస్ మోడ్','குரல் பயன்முறை'],
+'set.dark':['Dark Mode','डार्क मोड','ଡାର୍କ ମୋଡ୍','ডার্ক মোড','డార్క్ మోడ్','இருண்ட பயன்முறை'],
+'set.vout':['Voice Output','वॉइस आउटपुट','ଭଏସ୍ ଆଉଟପୁଟ୍','ভয়েস আউটপুট','వాయిస్ అవుట్‌పుట్','குரல் வெளியீடு'],
+'set.rate':['Speech Rate','बोलने की गति','କହିବା ଗତି','কথার গতি','మాట్లాడే వేగం','பேச்சு வேகம்'],
+'set.ai':['ECOBIN AI Support','ECOBIN AI सहायता','ECOBIN AI ସହାୟତା','ECOBIN AI সহায়তা','ECOBIN AI సహాయం','ECOBIN AI உதவி'],
+'set.sr':['Speech Recognition','वाक् पहचान','ସ୍ପିଚ୍ ଚିହ୍ନଟ','বক্তৃতা শনাক্তকরণ','స్పీచ్ గుర్తింపు','பேச்சு அறிதல்'],
+'set.tts':['Text-to-Speech','टेक्स्ट-टू-स्पीच','ଟେକ୍ସଟ୍-ଟୁ-ସ୍ପିଚ୍','টেক্সট-টু-স্পিচ','టెక్స్ట్-టు-స్పీచ్','உரை-பேச்சு'],
+'set.on':['Available','उपलब्ध','ଉପଲବ୍ଧ','উপলব্ধ','అందుబాటులో','கிடைக்கிறது'],
+'set.off':['Not supported','समर्थित नहीं','ସମର୍ଥିତ ନୁହେଁ','সমর্থিত নয়','మద్దతు లేదు','ஆதரவு இல்லை'],
+'common.login':['Login','लॉगिन','ଲଗଇନ୍','লগইন','లాగిన్','உள்நுழை'],
+'tab.all':['All','सभी','ସମସ୍ତ','সব','అన్నీ','அனைத்தும்'],
+'notif.dispatched':['Robot dispatched','रोबोट रवाना किया गया','ରୋବଟ୍ ପଠାଯାଇଛି','রোবট পাঠানো হয়েছে','రోబోట్ పంపబడింది','ரோபோ அனுப்பப்பட்டது'],
+'notif.accepted':['Collection request accepted','संग्रह अनुरोध स्वीकृत','ସଂଗ୍ରହ ଅନୁରୋଧ ଗ୍ରହଣ','সংগ্রহের অনুরোধ গৃহীত','సేకరణ అభ్యర్థన ఆమోదించబడింది','சேகரிப்பு கோரிக்கை ஏற்கப்பட்டது'],
+'val.empty':['Enter email and password.','ईमेल और पासवर्ड दर्ज करें।','ଇମେଲ୍ ଏବଂ ପାସୱାର୍ଡ ଦିଅନ୍ତୁ।','ইমেল ও পাসওয়ার্ড দিন।','ఇమెయిల్ మరియు పాస్‌వర్డ్ నమోదు చేయండి.','மின்னஞ்சல் மற்றும் கடவுச்சொல்லை உள்ளிடவும்.'],
+'val.bad':['Invalid credentials for the selected role.','चुनी गई भूमिका के लिए गलत क्रेडेंशियल।','ବାଛିଥିବା ଭୂମିକା ପାଇଁ ଭୁଲ୍ ପରିଚୟ।','নির্বাচিত ভূমিকার জন্য ভুল শংসাপত্র।','ఎంచుకున్న పాత్రకు తప్పు ఆధారాలు.','தேர்ந்தெடுத்த பங்கிற்கு தவறான சான்றுகள்.'],
+'chat.title':['ECOBIN AI Support','ECOBIN AI सहायता','ECOBIN AI ସହାୟତା','ECOBIN AI সহায়তা','ECOBIN AI సహాయం','ECOBIN AI உதவி'],
+'chat.sub':['How can I help you?','मैं आपकी कैसे मदद कर सकता हूं?','ମୁଁ କିପରି ସାହାଯ୍ୟ କରିପାରିବି?','আমি কীভাবে সাহায্য করতে পারি?','నేను ఎలా సహాయం చేయగలను?','நான் எப்படி உதவலாம்?'],
+'chat.ph':['Ask ECOBIN AI...','ECOBIN AI से पूछें...','ECOBIN AI କୁ ପଚାରନ୍ତୁ...','ECOBIN AI-কে জিজ্ঞাসা করুন...','ECOBIN AI ని అడగండి...','ECOBIN AI-யிடம் கேளுங்கள்...'],
+'chat.s1':['Where is robot MR-01?','रोबोट MR-01 कहाँ है?','ରୋବଟ୍ MR-01 କେଉଁଠି?','রোবট MR-01 কোথায়?','రోబోట్ MR-01 ఎక్కడ?','ரோபோ MR-01 எங்கே?'],
+'chat.s2':['Show pending requests','लंबित अनुरोध दिखाओ','ବକେୟା ଅନୁରୋଧ ଦେଖାନ୍ତୁ','মুলতুবি অনুরোধ দেখান','పెండింగ్ అభ్యర్థనలు చూపండి','நிலுவை கோரிக்கைகளைக் காட்டு'],
+'chat.s3':['Show notifications','सूचनाएं दिखाओ','ବିଜ୍ଞପ୍ତି ଦେଖାନ୍ତୁ','বিজ্ঞপ্তি দেখান','నోటిఫికేషన్లు చూపండి','அறிவிப்புகளைக் காட்டு'],
+'c.robot':['{id} is currently at {loc}. Status: {s}. Battery: {b}%. Current task: {t}.','{id} अभी {loc} पर है। स्थिति: {s}। बैटरी: {b}%। वर्तमान कार्य: {t}।','{id} ବର୍ତ୍ତମାନ {loc} ରେ ଅଛି। ସ୍ଥିତି: {s}। ବ୍ୟାଟେରୀ: {b}%। ବର୍ତ୍ତମାନ କାର୍ଯ୍ୟ: {t}।','{id} এখন {loc}-এ আছে। অবস্থা: {s}। ব্যাটারি: {b}%। বর্তমান কাজ: {t}।','{id} ప్రస్తుతం {loc} వద్ద ఉంది. స్థితి: {s}. బ్యాటరీ: {b}%. ప్రస్తుత పని: {t}.','{id} தற்போது {loc} இல் உள்ளது. நிலை: {s}. பேட்டரி: {b}%. தற்போதைய பணி: {t}.'],
+'c.pending':['You have {n} pending requests.','आपके {n} अनुरोध अभी लंबित हैं।','ଆପଣଙ୍କର {n}ଟି ଅନୁରୋଧ ବକେୟା ଅଛି।','আপনার {n}টি অনুরোধ মুলতুবি আছে।','మీకు {n} పెండింగ్ అభ్యర్థనలు ఉన్నాయి.','உங்களுக்கு {n} நிலுவை கோரிக்கைகள் உள்ளன.'],
+'c.crit':['There are currently {n} critical bins: {l}.','अभी {n} गंभीर डिब्बे हैं: {l}।','ବର୍ତ୍ତମାନ {n}ଟି ସଂକଟଜନକ ବିନ୍ ଅଛି: {l}।','এখন {n}টি জটিল বিন আছে: {l}।','ప్రస్తుతం {n} క్రిటికల్ బిన్‌లు ఉన్నాయి: {l}.','தற்போது {n} முக்கியமான தொட்டிகள் உள்ளன: {l}.'],
+'c.refuse':['Sorry, your role does not have access to that.','क्षमा करें, आपकी भूमिका को इसकी अनुमति नहीं है।','କ୍ଷମା କରନ୍ତୁ, ଆପଣଙ୍କ ଭୂମିକାକୁ ଏହାର ଅନୁମତି ନାହିଁ।','দুঃখিত, আপনার ভূমিকার এতে অ্যাক্সেস নেই।','క్షమించండి, మీ పాత్రకు దీనికి అనుమతి లేదు.','மன்னிக்கவும், உங்கள் பங்குக்கு இதற்கு அனுமதி இல்லை.'],
+'c.nav':['Opening {p}…','{p} खोल रहा हूं…','{p} ଖୋଲୁଛି…','{p} খুলছি…','{p} తెరుస్తున్నాను…','{p} திறக்கிறேன்…'],
+'c.ok':['Done.','हो गया।','ହୋଇଗଲା।','হয়ে গেছে।','పూర్తయింది.','முடிந்தது.'],
+'c.unavail':['ECOBIN AI is temporarily unavailable. Please try again later.','ECOBIN AI अस्थायी रूप से उपलब्ध नहीं है। कृपया बाद में पुनः प्रयास करें।','ECOBIN AI ଅସ୍ଥାୟୀ ଭାବେ ଉପଲବ୍ଧ ନାହିଁ। ଦୟାକରି ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।','ECOBIN AI সাময়িকভাবে অনুপলব্ধ। অনুগ্রহ করে পরে আবার চেষ্টা করুন।','ECOBIN AI తాత్కాలికంగా అందుబాటులో లేదు. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి.','ECOBIN AI தற்காலிகமாக கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.'],
+'v.tap':['Tap to speak','बोलने के लिए टैप करें','କହିବାକୁ ଟାପ୍ କରନ୍ତୁ','বলতে ট্যাপ করুন','మాట్లాడటానికి నొక్కండి','பேச தட்டவும்'],
+'v.listening':['Listening...','सुन रहा हूं...','ଶୁଣୁଛି...','শুনছি...','వింటున్నాను...','கேட்கிறேன்...'],
+'v.processing':['Processing...','प्रोसेस हो रहा है...','ପ୍ରକ୍ରିୟାକରଣ...','প্রক্রিয়াকরণ...','ప్రాసెస్ అవుతోంది...','செயலாக்குகிறது...'],
+'v.fail':["Sorry, I couldn't understand that. Please try again.",'क्षमा करें, मैं समझ नहीं पाया। कृपया फिर कोशिश करें।','କ୍ଷମା କରନ୍ତୁ, ବୁଝିପାରିଲି ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।','দুঃখিত, বুঝতে পারিনি। আবার চেষ্টা করুন।','క్షమించండి, అర్థం కాలేదు. మళ్లీ ప్రయత్నించండి.','மன்னிக்கவும், புரியவில்லை. மீண்டும் முயற்சிக்கவும்.'],
+'v.unsupported':['Voice recognition is not supported by this browser. You can still use ECOBIN AI by typing.','इस ब्राउज़र में वॉइस पहचान समर्थित नहीं है। आप टाइप करके ECOBIN AI उपयोग कर सकते हैं।','ଏହି ବ୍ରାଉଜରରେ ଭଏସ୍ ଚିହ୍ନଟ ସମର୍ଥିତ ନୁହେଁ। ଆପଣ ଟାଇପ୍ କରି ECOBIN AI ବ୍ୟବହାର କରିପାରିବେ।','এই ব্রাউজারে ভয়েস শনাক্তকরণ সমর্থিত নয়। টাইপ করে ECOBIN AI ব্যবহার করতে পারেন।','ఈ బ్రౌజర్‌లో వాయిస్ గుర్తింపు మద్దతు లేదు. టైప్ చేసి ECOBIN AI ఉపయోగించవచ్చు.','இந்த உலாவியில் குரல் அறிதல் ஆதரிக்கப்படவில்லை. தட்டச்சு செய்து ECOBIN AI பயன்படுத்தலாம்.'],
+'v.noVoice':['Voice output for this language is not available in your current browser.','इस भाषा के लिए वॉइस आउटपुट आपके मौजूदा ब्राउज़र में उपलब्ध नहीं है।','ଏହି ଭାଷା ପାଇଁ ଭଏସ୍ ଆଉଟପୁଟ୍ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଉପଲବ୍ଧ ନାହିଁ।','এই ভাষার জন্য ভয়েস আউটপুট আপনার ব্রাউজারে উপলব্ধ নয়।','ఈ భాషకు వాయిస్ అవుట్‌పుట్ మీ బ్రౌజర్‌లో అందుబాటులో లేదు.','இந்த மொழிக்கான குரல் வெளியீடு உங்கள் உலாவியில் கிடைக்கவில்லை.'],
+'v.cancel':['Cancel','रद्द करें','ବାତିଲ୍','বাতিল','రద్దు','ரத்து']};
+const LOCALES={};LG.forEach((l,i)=>{LOCALES[l]={};for(const k in K)LOCALES[l][k]=K[k][i]});
+const REV={};for(const k in LOCALES.en)REV[LOCALES.en[k]]=k;
+let lang=ls.g('eb_lang','en');if(!LG.includes(lang))lang='en';document.documentElement.lang=lang;
+function t(k,v){let s=(LOCALES[lang]||{})[k];if(!s){console.warn('[i18n] missing key',k,'for',lang);s=LOCALES.en[k]}if(!s)return k;if(v)for(const x in v)s=s.replace('{'+x+'}',v[x]);return s}
+const tx=s=>REV[s]?t(REV[s]):s;
+function applyI18n(){document.querySelectorAll('#root,#cw').forEach(r=>{const w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){const v=n.nodeValue,s=v.trim();if(!s)continue;let k=REV[s],pre='';if(!k){const m=s.match(/^(\S+)\s+(.+)$/);if(m&&!/\p{L}/u.test(m[1])&&REV[m[2]]){pre=m[1]+' ';k=REV[m[2]]}}if(k)n.nodeValue=v.replace(s,pre+t(k))}r.querySelectorAll('[placeholder]').forEach(e=>{const k=REV[e.placeholder];if(k)e.placeholder=t(k)})})}
+function setLang(l){lang=l;ls.s('eb_lang',l);document.documentElement.lang=l;S.r?shell():loginPage()}
+/* wrap existing renderers */
+const _shell=shell;shell=function(){_shell();applyI18n();chatMount()};
+const _lp=loginPage;loginPage=function(){_lp();chatRm();const b=document.querySelector('.lbox');if(b)b.insertAdjacentHTML('afterbegin',`<select aria-label="Language" onchange="setLang(this.value)" style="width:auto;float:right;margin:0">${LG.map((l,i)=>`<option value="${l}" ${l==lang?'selected':''}>${LN[i]}</option>`).join('')}</select>`);applyI18n()};
+const _dl=doLogin;doLogin=function(){_dl();const e=$('#err');if(e&&e.textContent)e.textContent=tx(e.textContent)};
+const _to=toast;toast=function(m){m=tx(m);_to(m);if(ls.g('vout','0')=='1')speak(m)};
+const _tog=tog;tog=function(k){if(k=='vout'){ls.s('vout',ls.g('vout','0')=='1'?'0':'1');shell()}else _tog(k)};
+const _logout=logout;logout=function(){chatRm();_logout()};
+/* speech */
+const SRc=window.SpeechRecognition||window.webkitSpeechRecognition,TTS='speechSynthesis' in window;
+function speak(x){if(!TTS)return;const vs=speechSynthesis.getVoices(),pf=lang;const cand=vs.filter(v=>v.lang.toLowerCase().startsWith(pf));if(vs.length&&!cand.length){_to(t('v.noVoice'));return}
+speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(x);u.lang=SR[LG.indexOf(lang)];u.rate=+ls.g('eb_rate','1');const sel=ls.g('eb_vsel','');u.voice=cand.find(v=>v.name==sel)||cand[0]||null;speechSynthesis.speak(u)}
+function VS(m){let e=$('#vs');if(!m){e&&e.remove();return}if(!e){e=document.createElement('div');e.id='vs';e.className='card';e.style.cssText='position:fixed;left:14px;bottom:84px;z-index:70;max-width:300px';document.body.appendChild(e)}e.innerHTML=`<div>${m.replace(/</g,'&lt;')}</div><button class="btn sm o" style="margin-top:8px" onclick="VS();window._rec&&window._rec.abort()">${t('v.cancel')}</button>`}
+function listen(cb){if(!SRc){_to(t('v.unsupported'));return}try{const r=new SRc();window._rec=r;r.lang=SR[LG.indexOf(lang)];r.interimResults=false;let got=0;VS('🔴 '+t('v.listening'));
+r.onresult=e=>{got=1;const x=e.results[0][0].transcript;VS('“'+x+'” · '+t('v.processing'));setTimeout(()=>{VS();cb(x)},400)};r.onerror=()=>{got=1;VS(t('v.fail'));setTimeout(VS,2500)};r.onend=()=>{if(!got){VS(t('v.fail'));setTimeout(VS,2500)}};r.start()}catch(e){VS(t('v.fail'));setTimeout(VS,2500)}}
+function voice(){if(!SRc){_to(t('v.unsupported'));return}listen(x=>{const r=handle(x);if(r===null){chatOpen(1);ask(x)}else{_to(r)}})}
+/* intents (multilingual keywords) */
+const KW={pending:['pending','लंबित','ବକେୟା','মুলতুবি','పెండింగ్','நிலுவை'],done:['completed','पूर्ण','ସମ୍ପୂର୍ଣ୍ଣ','সম্পন্ন','పూర్తి','முடிந்த'],notif:['notification','सूचना','ବିଜ୍ଞପ୍ତି','বিজ্ঞপ্তি','నోటిఫికేషన్','அறிவிப்பு'],dash:['dashboard','डैशबोर्ड','ଡ୍ୟାସବୋର୍ଡ','ড্যাশবোর্ড','డ్యాష్‌బోర్డ్','டாஷ்போர்டு'],set:['setting','सेटिंग','ସେଟିଂ','সেটিং','సెట్టింగ్','அமைப்பு'],rep:['report','रिपोर्ट','ରିପୋର୍ଟ','রিপোর্ট','నివేదిక','அறிக்கை'],crit:['critical','गंभीर','ସଂକଟ','জটিল','క్రిటికల్','முக்கிய'],dark:['dark','डार्क','ଡାର୍କ','ডার্ক','డార్క్','டார்க்','இருண்ட'],off:[' off','बंद','ବନ୍ଦ','বন্ধ','ఆఫ్','ஆஃப்'],task:['task','कार्य','टास्क','ଟାସ୍କ','କାର୍ଯ୍ୟ','কাজ','పని','பணி'],robot:['robot','रोबोट','ରୋବଟ','রোবট','రోబోట్','ரோபோ'],waste:['waste','कचरा','ବର୍ଜ୍ୟ','বর্জ্য','వ్యర్థ','கழிவு'],user:['user','उपयोगकर्ता','ଉପଯୋଗକର୍ତ୍ତା','ব্যবহারকারী','వినియోగదారు','பயனர்'],req:['request collection','collection request','संग्रह अनुरोध','ସଂଗ୍ରହ ଅନୁରୋଧ','সংগ্রহের অনুরোধ','సేకరణ అభ్యర్థన','சேகரிப்பு கோரிக்கை'],navg:['navigat','नेविगेट','ନାଭିଗେଟ','নেভিগেট','నావిగేట్','வழிசெலுத்'],arr:['arrived','पहुंच','ପହଞ୍ଚ','পৌঁছ','చేరుకు','வந்து'],lang:['language','भाषा','ଭାଷା','ভাষা','భాష','மொழி']};
+const LX=[['english','अंग्रेजी','ଇଂରାଜୀ','ইংরেজি','ఇంగ్లీష్','ஆங்கிலம்'],['hindi','हिंदी','हिन्दी','ହିନ୍ଦୀ','হিন্দি','హిందీ','இந்தி'],['odia','oriya','ओड़िया','ଓଡ଼ିଆ','ওড়িয়া','ఒడియా','ஒடியா'],['bengali','बंगाली','বাংলা','ବଙ୍ଗାଳୀ','బెంగాలీ','வங்காளம்'],['telugu','तेलुगु','తెలుగు','ତେଲୁଗୁ','তেলুগু','தெலுங்கு'],['tamil','तमिल','தமிழ்','ତାମିଲ','তামিল','తమిళం']];
+const CH={open:0,msgs:[],robot:null,busy:0};
+const PN={my:'nav.my',dash:'nav.dashboard',notif:'nav.notif',set:'nav.settings',tasks:'nav.tasks',robot:'nav.robots',track:'nav.track',hist:'nav.history',req:'nav.request',rep:'nav.reports',users:'nav.users',nav:'nav.robots',waste:'nav.history'};
+function handle(q){q=' '+q.toLowerCase();const R=S.r,has=k=>KW[k].some(w=>q.includes(w)),rb=(q.match(/mr\W*0?(\d)/)||[])[1],deny=()=>t('c.refuse');
+const open=(p,label)=>{go(p);return t('c.nav',{p:t(PN[label||p])})};
+const li=LX.findIndex(a=>a.some(w=>q.includes(w)));
+if(li>=0&&(has('lang')||q.includes('change')||q.includes('switch'))){setLang(LG[li]);return t('c.ok')}
+if(has('dark')){if(has('off')==S.dark)_tog('dark');return t('c.ok')}
+if(has('user')){if(R!='admin')return deny();return open('users')}
+if(has('rep')){if(R!='admin')return deny();return open('rep')}
+if(has('crit')){if(R!='admin')return deny();const b=bins.filter(x=>x[3]>=90);S.tab.w='Bin Monitoring';go('waste');return t('c.crit',{n:b.length,l:b.map(x=>x[0]+' '+x[1]).join(', ')||'—'})}
+if(has('robot')||rb){const own=reqs[0]&&reqs[0].rb,id='MR-0'+(rb||(CH.robot||S.rob||'MR-01').slice(-1));if(R=='staff'&&id!=own)return deny();const r=robots.find(x=>x.id==id);if(!r)return null;CH.robot=id;S.rob=id;const out=t('c.robot',{id,loc:r.loc,s:tx(r.s.replace(/^/,'')),b:r.b,t:r.t});if(q.includes('track')||q.includes('open')||q.includes('show'))go(R=='staff'?'dash':R=='admin'?'track':'robot');return out}
+if(has('pending')||has('done')){const p=has('pending');if(R=='staff'){const n=reqs.filter(r=>p?r.st==0:r.st==7).length;S.tab.my=p?'Pending':'Completed';go('my');return p?t('c.pending',{n}):t('c.nav',{p:t('st.completed')})}const n=tasks.filter(x=>p?x.st=='Pending':x.st=='Completed').length;S.tab.my=null;go('tasks');return p?t('c.pending',{n}):t('c.nav',{p:t('st.completed')})}
+if(has('task')){if(R=='staff')return deny();return open('tasks')}
+if(has('arr')){if(R!='collector')return deny();const k=tasks.find(x=>x.id==S.task);if(k&&k.step==2){advance(k.id);return t('c.ok')}return open('tasks')}
+if(has('navg')){if(R=='staff')return deny();return open(R=='admin'?'track':'nav','track')}
+if(has('notif'))return open('notif');if(has('dash'))return open('dash');if(has('set'))return open('set');
+if(has('req')){if(R!='staff')return deny();return open('req')}
+if(has('waste')){if(R=='admin'){S.tab.w='Analytics';go('waste');return t('c.nav',{p:t('nav.history')})}return open('hist')}
+return null}
+/* AI (Claude via the page's sample capability; key stays server-side) */
+let aiOK=false;(async()=>{try{aiOK=!!(window.claude&&await window.claude.use('sample'))}catch(e){aiOK=false}if(S.r&&S.p=='set')shell()})();
+function ctx(){const R=S.r,b={role:R,page:S.p,openTask:S.task,lastRobot:CH.robot,language:LN[LG.indexOf(lang)]};
+if(R=='staff')return{...b,myRequests:reqs,myRobot:robots.find(r=>r.id==(reqs[0]||{}).rb)||null,notifications:N.filter(n=>n.r=='staff')};
+if(R=='collector')return{...b,tasks,robots,notifications:N.filter(n=>n.r=='collector')};
+return{...b,requests:reqs,tasks,robots,bins:bins.map(x=>({id:x[0],loc:x[1],cat:x[2],fill:x[3],status:binSt(x[3])[0]})),notifications:N,users:USERLIST.map(u=>[u[0],u[1],u[4]])}}
+async function llm(q){const sm=window.claude&&await window.claude.use('sample');if(!sm)throw 0;
+const turns=CH.msgs.slice(-7,-1).map(m=>({role:m.r=='u'?'user':'assistant',content:m.x}));turns.push({role:'user',content:`You are ECOBIN AI Support, assistant inside a hospital medical-waste app. Reply ONLY in ${LN[LG.indexOf(lang)]}, max 3 short sentences. Use ONLY the DATA below; never invent values; if data is missing say you don't have live access to it. The user's role is ${S.r}: refuse anything outside that role (managing users/robots/config, other users' info, admin reports for non-admins). Never reveal passwords or keys. Resolve pronouns like "its" using lastRobot/openTask. App help: staff request via Request Collection form; collectors use Assigned Tasks then step buttons; Settings has language, voice, dark mode.\nDATA: ${JSON.stringify(ctx())}\nQUESTION: ${q}`});
+const r=await sm(turns,{cache:false});return r.text}
+async function ask(q){q=q.trim();if(!q||CH.busy)return;CH.msgs.push({r:'u',x:q});chatDraw();const h=handle(q);if(h!==null){CH.msgs.push({r:'b',x:h});chatDraw();if(ls.g('vout','0')=='1')speak(h);return}
+CH.busy=1;chatDraw('…');let a;try{a=await llm(q)}catch(e){a=t('c.unavail')}CH.busy=0;CH.msgs.push({r:'b',x:a});chatDraw();if(ls.g('vout','0')=='1')speak(a)}
+/* chat UI */
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function chatRm(){const e=$('#cw');e&&e.remove()}
+function chatOpen(o){CH.open=o;chatMount()}
+function chatMount(){if(!S.r||ls.g('eb_ai','1')!='1'){chatRm();return}let w=$('#cw');if(!w){w=document.createElement('div');w.id='cw';document.body.appendChild(w)}
+w.innerHTML=`<style>#cb{position:fixed;right:16px;bottom:16px;z-index:45}#cp{position:fixed;right:16px;bottom:16px;width:min(380px,calc(100vw - 32px));height:min(520px,calc(100vh - 100px));z-index:65;display:flex;flex-direction:column;padding:0;overflow:hidden}@media(max-width:800px){#cb{bottom:84px}#cp{bottom:84px;height:min(480px,calc(100vh - 160px))}}.cm{max-width:85%;padding:8px 12px;border-radius:12px;margin:6px 0;white-space:pre-wrap}.cu{background:var(--g);color:#fff;margin-left:auto}.cbt{background:var(--bd)}</style>`+(CH.open?`<div id="cp" class="card"><div style="background:var(--g);color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center"><div>🤖 <b>${t('chat.title')}</b><div style="font-size:12px">● Online · ${t('chat.sub')}</div></div><button class="ico" style="color:#fff" onclick="chatOpen(0)" aria-label="close">✕</button></div><div id="cmsg" style="flex:1;overflow:auto;padding:10px"></div><div style="padding:6px 10px;display:flex;gap:6px;flex-wrap:wrap">${['s1','s2','s3'].map(s=>`<span class="tab" onclick="ask(t('chat.${s}'))">${t('chat.'+s)}</span>`).join('')}</div><div style="display:flex;gap:6px;padding:10px"><input id="cin" style="margin:0" placeholder="${t('chat.ph')}" onkeydown="if(event.key=='Enter'){ask(this.value);this.value=''}"><button class="btn sm o" title="Voice" onclick="listen(x=>ask(x))">🎤</button><button class="btn sm" onclick="const i=$('#cin');ask(i.value);i.value=''">➤</button></div></div>`:`<button id="cb" class="btn" onclick="chatOpen(1)">🤖 ECOBIN AI</button>`);if(CH.open)chatDraw()}
+function chatDraw(pending){const m=$('#cmsg');if(!m)return;m.innerHTML=CH.msgs.map((x,i)=>`<div class="cm ${x.r=='u'?'cu':'cbt'}">${esc(x.x)}${x.r=='b'?` <span style="cursor:pointer" title="Read aloud" onclick="speak(CH.msgs[${i}].x)">🔊</span>`:''}</div>`).join('')+(pending?'<div class="cm cbt">…</div>':'');m.scrollTop=m.scrollHeight}
+/* settings */
+PAGES.set=function(){const tg=(k,l,on)=>`<div class="row"><span>${l}</span><div class="tg ${on?'on':''}" onclick="tog('${k}')"><i></i></div></div>`;const dot=(ok,txt)=>`<span style="color:${ok?'var(--g)':'var(--rd)'}">● ${txt}</span>`;
+const vs=TTS?speechSynthesis.getVoices().filter(v=>v.lang.toLowerCase().startsWith(lang)):[];
+return `<div class="grid g2"><div class="card"><h3>${t('set.language')}</h3><select onchange="setLang(this.value)">${LG.map((l,i)=>`<option value="${l}" ${l==lang?'selected':''}>${LN[i]}</option>`).join('')}</select><div class="row"><span>Translation</span>${dot(1,'Active')}</div><h3 style="margin-top:14px">${t('set.dark')}</h3>${tg('dark',t('set.dark'),S.dark)}</div>
+<div class="card"><h3>${t('set.voice')}</h3>${tg('voice',t('set.voice'),S.voice)}<div class="row"><span>${t('set.sr')}</span>${dot(!!SRc,SRc?t('set.on'):t('set.off'))}</div><div class="row"><span>${t('set.tts')}</span>${dot(TTS,TTS?t('set.on'):t('set.off'))}</div>${tg('vout',t('set.vout'),ls.g('vout','0')=='1')}<div class="row"><span>${t('set.rate')}</span><input type="range" min="0.6" max="1.4" step="0.1" value="${ls.g('eb_rate','1')}" oninput="ls.s('eb_rate',this.value)" style="width:120px;margin:0"></div>${vs.length?`<select onchange="ls.s('eb_vsel',this.value)">${vs.map(v=>`<option ${v.name==ls.g('eb_vsel','')?'selected':''}>${esc(v.name)}</option>`).join('')}</select>`:(TTS?`<p style="font-size:12px;color:var(--mu)">${t('v.noVoice')}</p>`:'')}${SRc?'':`<p style="font-size:12px;color:var(--mu)">${t('v.unsupported')}</p>`}</div>
+<div class="card"><h3>${t('set.ai')}</h3>${tg('eb_ai',t('set.ai'),ls.g('eb_ai','1')=='1')}<div class="row"><span>AI</span>${dot(aiOK,aiOK?'Connected':'Not connected (built-in answers only)')}</div></div></div>`};
+if(TTS)speechSynthesis.onvoiceschanged=()=>{if(S.r&&S.p=='set')shell()};
+console.info('ECOBIN i18n ready', lang);
+
+splash();
+</script></body></html>
